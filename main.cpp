@@ -1,13 +1,16 @@
 /* 
-PREDATOR–PREY (Single Ecosystem Grid) — PSEUDOCODE
+   EcoSim: A simple ecosystem simulation with plants, herbivores, and predators.
+*/
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <map>
+#include <array>
+#include <list>
 
-// --- Includes & Aliases ---
+using namespace std;
 
-include iostream, fstream, string, map, array, list, iomanip
-
-using namespace std
-
-// --- Global/Config --- (read from file)
+// Global Config (should be from file, but hardcoded for now)
 
 int GRID_ROWS = 0, GRID_COLS = 0;
 
@@ -23,7 +26,8 @@ int starvationSteps = 3; // predator starves after these steps
 
 double migrateRate = 0.02; // chance an H/R moves to neighbor
 
-std::mapstd::string,int // predatorHunger; // tracks steps since last meal (keyed by "cell|index") 
+map<string, int> predatorHunger; // tracks steps since last meal (keyed by "cell|index") 
+
 
 // ==========================================================
 // HELPER FUNCTIONS
@@ -43,21 +47,22 @@ void popListN(list<string>& lst, const string& token, int n) {
 // MAIN FUNCTIONS
 // ==========================================================
 
-File Loading function:
+// File Loading function:
+
 bool loadWorld(const string& path, EcoMap& eco) { } 
 //   - open file
 //   - parse lines for GRID, PARAM, and CELL entries
 //   - populate the map accordingly
 //   - return true if successful, false otherwise
 
-Prints global parameters function:
+// Prints global parameters function:
 void printGridHeader() { }
 
-Prints a formatted grid of (P,H,R) counts for each cell
+// Prints a formatted grid of (P,H,R) counts for each cell
 void printCountsTable(const EcoMap& eco, const string& title) {}
 
 
-Simulation Step function:
+// Simulation Step function:
 void simStep(EcoMap& eco, int t) { }
 //   For each cell in the map:
 //     1. Plants grow by growthRate fraction.
@@ -79,4 +84,7 @@ void simStep(EcoMap& eco, int t) { }
 //   6. Show snapshots every few steps.
 //   7. Print the final state neatly.
 
-/* End of Pseudocode */ 
+int main() {
+    //   1. Declare the map data structure.
+    EcoMap ecosystem;
+}
