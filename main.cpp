@@ -51,21 +51,25 @@ void popListN(list<string>& lst, const string& token, int n) {
 
 // File Loading function:
 
-bool loadWorld(const string& path, EcoMap& eco) { } 
+bool loadWorld(const string& path, EcoMap& eco) {  
 //   - open file
 //   - parse lines for GRID, PARAM, and CELL entries
 //   - populate the map accordingly
 //   - return true if successful, false otherwise
 
+    return false; 
+}
 // Prints global parameters function:
-void printGridHeader() { }
+void printGridHeader() {
+
+ }
 
 // Prints a formatted grid of (P,H,R) counts for each cell
 void printCountsTable(const EcoMap& eco, const string& title) {}
 
 
 // Simulation Step function:
-void simStep(EcoMap& eco, int t) { }
+void simStep(EcoMap& eco, int t) { 
 //   For each cell in the map:
 //     1. Plants grow by growthRate fraction.
 //     2. Herbivores feed on plants (remove one plant per herbivore if possible).
@@ -74,6 +78,7 @@ void simStep(EcoMap& eco, int t) { }
 //     5. Starvation/removal of predators if no prey.
 //     6. Predator reproduction.
 //     7. Migration
+}
 
 // ==========================================================
 // MAIN DRIVER
@@ -89,4 +94,12 @@ void simStep(EcoMap& eco, int t) { }
 int main() {
     //   1. Declare the map data structure.
     EcoMap ecosystem;
+    //   2. Attempt to load from external file.
+//   3. If file missing, seed with a tiny default grid.
+//   4. Display initial state.
+//   5. Run a time-based loop for at least 25 steps.
+//   6. Show snapshots every few steps.
+//   7. Print the final state neatly.
+
+    return 0;
 }
