@@ -10,6 +10,8 @@
 
 using namespace std;
 
+typedef map<string, array<list<string>, 3>> EcoMap; // using typedef for readability, may change to class method if I want to go oop later
+
 // Global Config (should be from file, but hardcoded for now)
 
 int GRID_ROWS = 0, GRID_COLS = 0;
