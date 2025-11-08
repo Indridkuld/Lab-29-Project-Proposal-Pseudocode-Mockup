@@ -41,7 +41,7 @@ string keyForCell(int r, int c) {
 }
 
 // Push 'n' tokens (used to populate the lists)
-void popListN(list<string>& lst, const string& token, int n) {
+void popList(list<string>& lst, const string& token, int n) {
     for (int i = 0; i < n; ++i) lst.push_back(token);
 }
 
@@ -82,8 +82,19 @@ void printGridHeader() {
 }
 
 // Prints a formatted grid of (P,H,R) counts for each cell
-void printCountsTable(const EcoMap& eco, const string& title) {}
-
+void printGridCount(string title) {
+    cout << "\n" << title << "\n";
+    for (int r = 0; r < GRID_ROWS; ++r) {
+        for (int c = 0; c < GRID_COLS; ++c) {
+            string key = keyForCell(r, c);
+            int P = ecosystem[key][0].size();
+            int H = ecosystem[key][1].size();
+            int R = ecosystem[key][2].size();
+            cout << "(" << P << "," << H << "," << R << ") ";
+        }
+        cout << "\n";
+    }
+}
 
 // Simulation Step function:
 void simStep(EcoMap& eco, int t) { 
@@ -95,6 +106,23 @@ void simStep(EcoMap& eco, int t) {
 //     5. Starvation/removal of predators if no prey.
 //     6. Predator reproduction.
 //     7. Migration
+}
+// Seed a default small grid if no file is found
+void seedDefault(EcoMap& eco) {
+    GRID_ROWS = 2; GRID_COLS = 2; STEPS = 25;
+    eco.clear();
+
+    auto& a = eco[keyForCell(0,0)];
+    popList(a[0], "P", 10); popList(a[1], "H", 3); popList(a[2], "R", 1);
+
+    auto& b = eco[keyForCell(0,1)];
+    popList(b[0], "P", 6);  popList(b[1], "H", 2); popList(b[2], "R", 0);
+
+    auto& c = eco[keyForCell(1,0)];
+    popList(c[0], "P", 8);  popList(c[1], "H", 1); popList(c[2], "R", 1);
+
+    auto& d = eco[keyForCell(1,1)];
+    popList(d[0], "P", 12); popList(d[1], "H", 4); popList(d[2], "R", 1);
 }
 
 // ==========================================================
@@ -112,11 +140,11 @@ int main() {
     //   1. Declare the map data structure.
     EcoMap ecosystem;
     //   2. Attempt to load from external file.
-//   3. If file missing, seed with a tiny default grid.
-//   4. Display initial state.
-//   5. Run a time-based loop for at least 25 steps.
-//   6. Show snapshots every few steps.
-//   7. Print the final state neatly.
+    //   3. If file missing, seed with a tiny default grid.
+    //   4. Display initial state.
+    //   5. Run a time-based loop for at least 25 steps.
+    //   6. Show snapshots every few steps.
+    //   7. Print the final state neatly.
 
     return 0;
 }
