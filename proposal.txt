@@ -1,0 +1,16 @@
+Project Overview:
+My project would simulate a single ecosystem made up 
+of predators, prey, and producers laid out as a 2d grid
+of cell locations. Each 'tic' of discrete time would cause
+the producers/plants to grow, herbivores to consume and reproduce, and 
+predators to hunt and reproduce. Population counts would be tracked
+per cell and simple migration between cells would be possible. 
+The program would run with certain initial conditions and run for
+at least 25 time periods. 
+Implementation: 
+I will use a std::map where each entry corresponds to a grid cell in the ecosystem. 
+The map’s key would be a cell identifier with row/column values.
+The value is the required nested structure (std::map<std::string, 
+std::array<std::list<std::string>, 3>>)
+each cell would contain an array of 3 lists (producer, consumer, predator) with 
+each list contining tokens that represent population numbers 

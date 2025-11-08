@@ -1,0 +1,26 @@
+EcoSim (Alpha) Unit Tests 
+
+Goals
+------
+1) Verify the loadWorld correctly:
+   - Opens a valid file and returns false if the file is missing.
+   - Parses GRID, PARAM, and CELL records.
+   - Ignores comments (# ...), including inline comments after records.
+   - Populates the map with correct counts for Plants/Herbivores/Predators.
+   - Updates globals: GRID_ROWS, GRID_COLS, STEPS, plantGrowth, herbBirth, predBirth, starvationSteps, migrateRate.
+
+2) Verify key helper:
+   - keyForCell(r,c) produces a stable, unique key string "rXcY".
+
+3) Verify one simulation step (simStep):
+   - Plants increase by max(1, floor(plantGrowth * P)) when P>0, then are eaten by herbivores.
+   - Herbivores starve (every 3rd unfed removed) and reproduce (floor(herbBirth * fed)).
+   - Predators eat herbivores (1 per predator), starve (every 2nd unfed removed), and reproduce (floor(predBirth * eaten)).
+
+Approach
+--------
+• Use ofstream to write a small model file (no stringstreams).
+• Load using loadWorld (ifstream).
+• Compare results using a simple expectEqual() that prints PASS/FAIL and tracks a failure count.
+• Also build a tiny in-memory 1×1 world, run simStep once, and check post-step counts.
+• Exit code: 0 if all tests pass; non-zero if any check fails.
