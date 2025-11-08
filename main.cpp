@@ -53,6 +53,16 @@ void popListN(list<string>& lst, const string& token, int n) {
 
 bool loadWorld(const string& path, EcoMap& eco) {  
 //   - open file
+    ifstream fin;
+    fin.open(path.c_str());
+    if (!fin.good()) {
+        cout << "File not found.\n";
+        return false;
+    }
+
+    bool sawCell = false;
+    string tag;
+
 //   - parse lines for GRID, PARAM, and CELL entries
 //   - populate the map accordingly
 //   - return true if successful, false otherwise
@@ -61,8 +71,15 @@ bool loadWorld(const string& path, EcoMap& eco) {
 }
 // Prints global parameters function:
 void printGridHeader() {
-
- }
+    cout << "\n=== Predator–Prey Grid Simulation (Alpha) ===\n";
+    cout << "Grid: " << GRID_ROWS << " x " << GRID_COLS
+         << " | Steps=" << STEPS
+         << " | plantGrowth=" << plantGrowth
+         << " | herbBirth="   << herbBirth
+         << " | predBirth="   << predBirth
+         << " | starvationSteps=" << starvationSteps
+         << "\n";
+}
 
 // Prints a formatted grid of (P,H,R) counts for each cell
 void printCountsTable(const EcoMap& eco, const string& title) {}
