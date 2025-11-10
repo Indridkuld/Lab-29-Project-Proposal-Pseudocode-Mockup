@@ -110,7 +110,7 @@ bool loadWorld(const string& path, EcoMap& eco) {
 }
 // Prints global parameters function:
 void printGridHeader() {
-    cout << "\n=== Predator–Prey Grid Simulation (Alpha) ===\n";
+    cout << "\n=== Predator Prey Grid Simulation (Beta) ===\n";
     cout << "Grid: " << GRID_ROWS << " x " << GRID_COLS
          << " | Steps=" << STEPS
          << " | plantGrowth=" << plantGrowth
@@ -120,21 +120,9 @@ void printGridHeader() {
          << "\n";
 }
 
-// Prints a formatted grid of (P,H,R) counts for each cell
+// Prints a formatted grid of (P,H,R) counts for each cell (full ecosystem)
 void printGridCount(const EcoMap& eco, const string& title) {
     cout << "\n" << title << "\n";
-    if (GRID_ROWS <= 0 || GRID_COLS <= 0) {
-        // fallback listing if grid size not set
-        for (const auto& kv : eco) { // check all cells
-            const auto& k = kv.first;
-            const auto& cell = kv.second;
-            cout << k << " -> (P=" << cell[0].size()
-                 << ", H=" << cell[1].size()
-                 << ", R=" << cell[2].size() << ")\n";
-        }
-        return;
-    }
-
     for (int r = 0; r < GRID_ROWS; ++r) {
         for (int c = 0; c < GRID_COLS; ++c) {
             string key = keyForCell(r, c);
@@ -149,6 +137,55 @@ void printGridCount(const EcoMap& eco, const string& title) {
         }
         cout << "\n";
     }
+}
+// creates a viewport printout of a section of the grid instead of full grid
+void printViewport(const EcoMap& eco, const string& title, int r0, int c0) {
+    int h = 5, w = 5;
+
+    cout << "\n" << title << "  [rows " << r0 << "-" << (r0+h-1)
+         << ", cols " << c0 << "-" << (c0+w-1) << "]\n";
+
+    if (GRID_ROWS <= 0 || GRID_COLS <= 0) {
+        cout << "(grid size not set)\n";
+        return;
+    }
+
+    // bounds check 
+    if (r0 < 0) r0 = 0;
+    if (c0 < 0) c0 = 0;
+    if (r0 + h > GRID_ROWS) r0 = GRID_ROWS - h;
+    if (c0 + w > GRID_COLS) c0 = GRID_COLS - w;
+    // print the viewport with nested loops and p, h, r counts
+    for (int r = r0; r < r0 + h; ++r) {
+        for (int c = c0; c < c0 + w; ++c) {
+            string key = keyForCell(r, c);
+            auto it = eco.find(key);
+            size_t P=0, H=0, R=0;
+            if (it != eco.end()) {
+                P = it->second[0].size();
+                H = it->second[1].size();
+                R = it->second[2].size();
+            }
+            cout << "(" << setw(2) << P << "," << setw(2) << H << "," << setw(2) << R << ") ";
+        }
+        cout << "\n";
+    }
+}
+// Prints a specific quadrant of the grid using printViewport
+void printQuadrant(const EcoMap& eco, int q, const string& title) {
+    int r0 = 0, c0 = 0;
+    int midRow = GRID_ROWS / 2;
+    int midCol = GRID_COLS / 2;
+
+    switch (q) {
+        case 1: r0 = 0;        c0 = midCol; break; // Top-Right
+        case 2: r0 = midRow;   c0 = 0;      break; // Bottom-Left
+        case 3: r0 = midRow;   c0 = midCol; break; // Bottom-Right
+        case 0:                 // Top-Left
+        default: r0 = 0;       c0 = 0;      break;
+    }
+
+    printViewport(eco, title, r0, c0);
 }
 
 // Simulation Step function:
@@ -237,11 +274,15 @@ int main() {
     printGridHeader();
     printGridCount(ecosystem, "Initial State:");
 
+    int quadView =0; // variable to track which quadrant to display 0-3
+    printQuadrant(ecosystem, quadView, "Initial Quadrant View:");
+
     // 5. Run a time-based loop for at least 25 steps.
     for (int t = 1; t <= STEPS; ++t) {
         simStep(ecosystem, t);
         if (t % 5 == 0) {
-            printGridCount(ecosystem, "Snapshot at t=" + to_string(t));
+        int q = ((t / 5) - 1) % 4; // cool way to cycle through 0-3 quadrants got it from copilot       
+        printQuadrant(ecosystem, q, "Snapshot Quadrant View at t=" + to_string(t)); 
         }
     }
 
@@ -250,3 +291,44 @@ int main() {
     cout << "\nDone.\n";
     return 0;
 }
+// ==========================================================
+// UNIT TESTING CODE - COMMENTED OUT
+// ==========================================================
+
+// int main() {
+//     cout << "EcoSim Unit Test\n";
+//     EcoMap testEco;
+
+//     // Test 1: keyForCell
+//     string key = keyForCell(3, 7);
+//     cout << "Test 1 - keyForCell(3,7): " << key << endl;
+
+//     // Test 2: popList
+//     list<string> plants;
+//     popList(plants, "P", 5);
+//     cout << "Test 2 - popList(): added " << plants.size() << " items (expected 5)\n";
+
+//     // Test 3: loadWorld simulation
+//     ifstream fin("ecosim.txt");
+//     if (fin.good()) {
+//         cout << "Test 3 - File opened successfully.\n";
+//         string firstWord;
+//         fin >> firstWord;
+//         cout << "First word in file: " << firstWord << endl;
+//         fin.close();
+//     } else {
+//         cout << "Test 3 - File not found. Please ensure ecosim.txt is present.\n";
+//     }
+
+//     // Test 4: Map population check
+//     testEco[keyForCell(0,0)][0].push_back("P");
+//     testEco[keyForCell(0,0)][1].push_back("H");
+//     testEco[keyForCell(0,0)][2].push_back("R");
+//     cout << "Test 4 - Map entry counts (P,H,R): "
+//          << testEco["r0c0"][0].size() << ", "
+//          << testEco["r0c0"][1].size() << ", "
+//          << testEco["r0c0"][2].size() << endl;
+
+//     cout << "Unit testing complete.\n";
+//     return 0;
+// }
