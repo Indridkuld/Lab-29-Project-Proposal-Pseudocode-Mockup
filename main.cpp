@@ -291,3 +291,44 @@ int main() {
     cout << "\nDone.\n";
     return 0;
 }
+// ==========================================================
+// UNIT TESTING CODE - COMMENTED OUT
+// ==========================================================
+
+// int main() {
+//     cout << "EcoSim Unit Test\n";
+//     EcoMap testEco;
+
+//     // Test 1: keyForCell
+//     string key = keyForCell(3, 7);
+//     cout << "Test 1 - keyForCell(3,7): " << key << endl;
+
+//     // Test 2: popList
+//     list<string> plants;
+//     popList(plants, "P", 5);
+//     cout << "Test 2 - popList(): added " << plants.size() << " items (expected 5)\n";
+
+//     // Test 3: loadWorld simulation
+//     ifstream fin("ecosim.txt");
+//     if (fin.good()) {
+//         cout << "Test 3 - File opened successfully.\n";
+//         string firstWord;
+//         fin >> firstWord;
+//         cout << "First word in file: " << firstWord << endl;
+//         fin.close();
+//     } else {
+//         cout << "Test 3 - File not found. Please ensure ecosim.txt is present.\n";
+//     }
+
+//     // Test 4: Map population check
+//     testEco[keyForCell(0,0)][0].push_back("P");
+//     testEco[keyForCell(0,0)][1].push_back("H");
+//     testEco[keyForCell(0,0)][2].push_back("R");
+//     cout << "Test 4 - Map entry counts (P,H,R): "
+//          << testEco["r0c0"][0].size() << ", "
+//          << testEco["r0c0"][1].size() << ", "
+//          << testEco["r0c0"][2].size() << endl;
+
+//     cout << "Unit testing complete.\n";
+//     return 0;
+// }

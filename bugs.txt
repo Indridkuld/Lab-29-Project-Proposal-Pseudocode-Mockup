@@ -1,0 +1,49 @@
+Bugs and Fix Log
+
+1. BUG: File not found error when running with ecosim.txt present.
+   FIX: File path was being read incorrectly. Added .c_str() in fin.open(path.c_str()).
+
+2. BUG: Garbled dash in console output (showing as ΓÇô).
+   FIX: Replaced Unicode en-dash with ASCII hyphen in printGridHeader().
+
+3. BUG: Infinite plant growth causing unrealistic numbers.
+   FIX: Added integer cast and minimum growth of +1 per step.
+
+4. BUG: Herbivores not dying even when no plants available.
+   FIX: Added starvation logic that removes 1 in 3 unfed herbivores each step.
+
+5. BUG: Predators not reducing when no herbivores available.
+   FIX: Implemented starvation removal of 1 in 2 unfed predators.
+
+6. BUG: Repeated “Snapshot at t=20” printing twice.
+   FIX: Cleaned up main() loop and removed duplicate print calls.
+
+7. BUG: Out-of-bounds grid indexing when printing partial views.
+   FIX: Added manual bounds checks in printViewport() instead of clampi() helper.
+
+8. BUG: Ecosystem not loading correctly from file.
+   FIX: Confirmed that ecosim.txt had proper GRID, PARAM, and CELL tags and added tag validation to loadWorld().
+
+9. BUG: Simulation reused default grid when file was actually found.
+   FIX: Ensured loadWorld() returns true only after at least one CELL tag is parsed (sawCell = true).
+
+10. BUG: Quadrant snapshots overlapping or incorrect region.
+    FIX: Corrected quadrant coordinate logic in printQuadrant() with (r0, c0) mapping for 0=NW, 1=NE, 2=SW, 3=SE.
+
+11. BUG: Output alignment issues in full grid display.
+    FIX: Used setw(2) in printGridCount() for uniform column width. Had to include iomanip
+
+12. BUG: Predator hunger tracking map never updated.
+    FIX: Deferred predatorHunger logic until later release; removed unused references for now.
+
+13. BUG: Unused variables causing warnings in compiler.
+    FIX: Removed unused temporary variables.
+
+14. BUG: Incorrect snapshot titles (e.g., “Snapshot at t=20” repeating multiple times).
+    FIX: Moved snapshot title formatting outside loop and concatenated t values directly with to_string(t).
+
+15. BUG: Ecosystem file ignored parameter updates.
+    FIX: Added parsing for “steps” and “starvationSteps” in PARAM section to override defaults.
+
+16. BUG: Empty grid crash when trying to printGridCount().
+    FIX: Added safety check for GRID_ROWS and GRID_COLS before accessing cell keys.
