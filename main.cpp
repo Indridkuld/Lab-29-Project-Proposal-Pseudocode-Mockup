@@ -274,11 +274,15 @@ int main() {
     printGridHeader();
     printGridCount(ecosystem, "Initial State:");
 
+    int quadView =0; // variable to track which quadrant to display 0-3
+    printQuadrant(ecosystem, quadView, "Initial Quadrant View:");
+
     // 5. Run a time-based loop for at least 25 steps.
     for (int t = 1; t <= STEPS; ++t) {
         simStep(ecosystem, t);
         if (t % 5 == 0) {
-            printGridCount(ecosystem, "Snapshot at t=" + to_string(t));
+        int q = ((t / 5) - 1) % 4; // cool way to cycle through 0-3 quadrants got it from copilot       
+        printQuadrant(ecosystem, q, "Snapshot Quadrant View at t=" + to_string(t)); 
         }
     }
 
