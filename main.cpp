@@ -120,21 +120,9 @@ void printGridHeader() {
          << "\n";
 }
 
-// Prints a formatted grid of (P,H,R) counts for each cell
+// Prints a formatted grid of (P,H,R) counts for each cell (full ecosystem)
 void printGridCount(const EcoMap& eco, const string& title) {
     cout << "\n" << title << "\n";
-    if (GRID_ROWS <= 0 || GRID_COLS <= 0) {
-        // fallback listing if grid size not set
-        for (const auto& kv : eco) { // check all cells
-            const auto& k = kv.first;
-            const auto& cell = kv.second;
-            cout << k << " -> (P=" << cell[0].size()
-                 << ", H=" << cell[1].size()
-                 << ", R=" << cell[2].size() << ")\n";
-        }
-        return;
-    }
-
     for (int r = 0; r < GRID_ROWS; ++r) {
         for (int c = 0; c < GRID_COLS; ++c) {
             string key = keyForCell(r, c);
@@ -149,6 +137,55 @@ void printGridCount(const EcoMap& eco, const string& title) {
         }
         cout << "\n";
     }
+}
+// creates a viewport printout of a section of the grid instead of full grid
+void printViewport(const EcoMap& eco, const string& title, int r0, int c0) {
+    int h = 5, w = 5;
+
+    cout << "\n" << title << "  [rows " << r0 << "-" << (r0+h-1)
+         << ", cols " << c0 << "-" << (c0+w-1) << "]\n";
+
+    if (GRID_ROWS <= 0 || GRID_COLS <= 0) {
+        cout << "(grid size not set)\n";
+        return;
+    }
+
+    // bounds check 
+    if (r0 < 0) r0 = 0;
+    if (c0 < 0) c0 = 0;
+    if (r0 + h > GRID_ROWS) r0 = GRID_ROWS - h;
+    if (c0 + w > GRID_COLS) c0 = GRID_COLS - w;
+    // print the viewport with nested loops and p, h, r counts
+    for (int r = r0; r < r0 + h; ++r) {
+        for (int c = c0; c < c0 + w; ++c) {
+            string key = keyForCell(r, c);
+            auto it = eco.find(key);
+            size_t P=0, H=0, R=0;
+            if (it != eco.end()) {
+                P = it->second[0].size();
+                H = it->second[1].size();
+                R = it->second[2].size();
+            }
+            cout << "(" << setw(2) << P << "," << setw(2) << H << "," << setw(2) << R << ") ";
+        }
+        cout << "\n";
+    }
+}
+// Prints a specific quadrant of the grid using printViewport
+void printQuadrant(const EcoMap& eco, int q, const string& title) {
+    int r0 = 0, c0 = 0;
+    int midRow = GRID_ROWS / 2;
+    int midCol = GRID_COLS / 2;
+
+    switch (q) {
+        case 1: r0 = 0;        c0 = midCol; break; // Top-Right
+        case 2: r0 = midRow;   c0 = 0;      break; // Bottom-Left
+        case 3: r0 = midRow;   c0 = midCol; break; // Bottom-Right
+        case 0:                 // Top-Left
+        default: r0 = 0;       c0 = 0;      break;
+    }
+
+    printViewport(eco, title, r0, c0);
 }
 
 // Simulation Step function:
