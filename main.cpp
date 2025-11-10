@@ -110,7 +110,7 @@ bool loadWorld(const string& path, EcoMap& eco) {
 }
 // Prints global parameters function:
 void printGridHeader() {
-    cout << "\n=== Predator–Prey Grid Simulation (Alpha) ===\n";
+    cout << "\n=== Predator Prey Grid Simulation (Beta) ===\n";
     cout << "Grid: " << GRID_ROWS << " x " << GRID_COLS
          << " | Steps=" << STEPS
          << " | plantGrowth=" << plantGrowth
